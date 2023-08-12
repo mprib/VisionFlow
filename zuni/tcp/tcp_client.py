@@ -15,9 +15,13 @@ client_socket.connect((server_IP, server_port))
 
 
 # receive a message from the server...you must specify the max number of bytes to receive
-message = client_socket.recv(1024)
+message = client_socket.recv(10)
 logger.info(f"Message received is: {message.decode('utf-8')}")
-client_socket.send("this is a test".encode())
+
+message = client_socket.recv(10)
+logger.info(f"Message received is: {message.decode('utf-8')}")
+
+client_socket.send("this is a test. Client sends to server on same socket.".encode())
 
 # close the client socket (best practice)
 client_socket.close()

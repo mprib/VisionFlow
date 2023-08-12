@@ -13,6 +13,10 @@ server_port = 12345
 
 server_socket.bind((server_IP, server_port))
 
-message, address = server_socket.recvfrom(1024)
+message, address = server_socket.recvfrom(10)
+logger.info(message.decode('utf-8'))
+logger.info(address)
+
+message, address = server_socket.recvfrom(10)
 logger.info(message.decode('utf-8'))
 logger.info(address)
