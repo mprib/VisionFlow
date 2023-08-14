@@ -1,6 +1,7 @@
 import cv2
 import socket
 import numpy as np
+import struct
 from pathlib import Path
 
 # Create a client socket
@@ -9,18 +10,29 @@ host = 'localhost'  # Change this to the server's IP address
 port = 12345
 client_socket.connect((host, port))
 
-frame_shape_bytes = client_socket.recv(4 * 3)  # Assuming 3D frame shape
-frame_shape = np.frombuffer(frame_shape_bytes, dtype=np.int32)
-frame_size = frame_shape.prod() * 3  # Assuming 3 channels
+def receive_all(sock, count):
+    buf = b''
+    while count:
+        newbuf = sock.recv(count)
+        if not newbuf:
+            return None
+        buf += newbuf
+        count -= len(newbuf)
+    return buf
 
-data = b""
-while len(data) < frame_size:
-    data += client_socket.recv(frame_size - len(data))
-
-frame_bytes = np.frombuffer(data, dtype=np.uint8)
-frame = frame_bytes.reshape(frame_shape)
 
 while True:
+    # Receive the header from the server
+    header = receive_all(client_socket, 16)
+
+    # Unpack the header to get the size and shape of the frame
+    frame_size, height, width, channels = struct.unpack('<LIII', header)
+
+    # Receive the data from the server
+    frame_bytes = receive_all(client_socket, frame_size)
+    # Convert the data back to a numpy array
+    frame = np.frombuffer(frame_bytes, dtype=np.uint8).reshape((height, width, channels))
+
     cv2.imshow("Received Frame", frame)
 
     if cv2.waitKey(1) & 0xFF == ord('q'):
