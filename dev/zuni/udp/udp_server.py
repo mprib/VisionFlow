@@ -2,7 +2,7 @@
 
 import  socket
 
-import log_manager
+import visionflow.log_manager as log_manager
 logger = log_manager.get(__name__)
 
 server_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)

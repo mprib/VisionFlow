@@ -1,7 +1,7 @@
 
 import  socket
 
-import log_manager
+import visionflow.log_manager as log_manager
 logger = log_manager.get(__name__)
 
 # create a client side socket that uses IPV4 (AF_INRT) and TCP (SOCK_STREAM)
