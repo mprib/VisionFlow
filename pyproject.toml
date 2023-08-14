@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "learn-networks"
+name = "VisionFlow"
 version = "0.0.0"
 description = "manage multiple camera connections over a network"
 authors = ["Mac Prible <prible@gmail.com>"]
