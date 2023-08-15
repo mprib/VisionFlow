@@ -9,7 +9,6 @@ readme = "README.md"
 [tool.poetry.dependencies]
 python = ">=3.10 , <3.12"
 opencv-contrib-python = "^4.8.0.76"
-PySide6 = "^6.5.2"
 
 [tool.poetry.group.dev.dependencies]
 black = "^23.3.0"
