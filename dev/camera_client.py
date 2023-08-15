@@ -23,6 +23,8 @@ def receive_all(sock, count):
 
 while True:
     # Receive the header from the server
+    # note it is 16 because each integer is 4 bytes and each piece of 
+    # data is an integer: frame_byte_size, frame_height, frame_width, frame_channels
     header = receive_all(client_socket, 16)
 
     # Unpack the header to get the size and shape of the frame
