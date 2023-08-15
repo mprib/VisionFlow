@@ -1,23 +1,37 @@
 import subprocess
 import time
+import sys
 
-# start server
-server = subprocess.Popen(["python", "./server.py"])
 
-# ensure the server had time to start
-time.sleep(2)
+DEBUG_TARGET = "client"
+DEBUG_TARGET = "server"
 
-# start client
-client = subprocess.Popen(["python", "./client.py"])
 
-# get output from the client
-stdout, stderr = client.communicate()
+match DEBUG_TARGET:
+    case "client":
+        # Use the current Python interpreter executable
+        python_executable = sys.executable
 
-# print the client output
-if stdout:
-    print('STDOUT:{}'.format(stdout))
-if stderr:
-    print('STDERR:{}'.format(stderr))
+        # start server
+        cmd = [python_executable, "visionflow/server.py"]
+        # server = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        server = subprocess.Popen(cmd)
+        # ensure the server had time to start
+        # pause = input("Type something to move on")
+        time.sleep(.5)
 
-# kill the server process once we're done
-server.terminate()
+        import visionflow.client
+
+    case "server":
+        # Use the current Python interpreter executable
+        python_executable = sys.executable
+        # start server
+        import visionflow.server
+
+        time.sleep(.5)
+        cmd = [python_executable, "visionflow/client.py"]
+        # server = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        server = subprocess.Popen(cmd)
+        # ensure the server had time to start
+        # pause = input("Type something to move on")
+
