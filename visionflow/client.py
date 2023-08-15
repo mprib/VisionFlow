@@ -1,4 +1,6 @@
 import cv2
+import log_manager
+logger = log_manager.get(__name__)
 import socket
 import numpy as np
 import struct
@@ -23,6 +25,9 @@ def receive_all(sock, count):
 
 while True:
     # Receive the header from the server
+    # note it is 16 because each integer is 4 bytes and each piece of 
+    # data is an integer: frame_byte_size, frame_height, frame_width, frame_channels
+    logger.info(f"Attemping to receive header")
     header = receive_all(client_socket, 16)
 
     # Unpack the header to get the size and shape of the frame
