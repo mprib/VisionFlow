@@ -9,7 +9,7 @@ import numpy as np
 from pathlib import Path
 
 # Create a capture object for the webcam
-capture = cv2.VideoCapture(0, cv2.CAP_DSHOW)
+capture = cv2.VideoCapture(0, cv2.CAP_ANY)
 
 # collect a test frame
 success, frame = capture.read()
