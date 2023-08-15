@@ -1,7 +1,11 @@
+from visionflow.log_manager import get
+logger = get(__name__)
 
 import cv2
 import socket
+import struct
 import numpy as np
+
 from pathlib import Path
 
 # Create a capture object for the webcam
@@ -30,18 +34,25 @@ print(f"Connection from: {client_address}")
 while True:
     ret, frame = capture.read()
 
+    # convert frame to bytes
+    frame = frame.astype(np.uint8)  # Ensure data is of type uint8
     # Serialize the frame as bytes
     frame_bytes = frame.tobytes()
-
+    frame_size = len(frame_bytes)
     # Get the frame shape for reconstruction
+    
     frame_shape = frame.shape
+    logger.info(f"Frame shape is: {frame_shape}")
 
-    # Send the frame shape first
-    frame_shape_bytes = np.array(frame_shape, dtype=np.int32).tobytes()
-    client_socket.sendall(frame_shape_bytes)
+    # package shape too
+    header = struct.pack('<LIII', frame_size, *frame.shape)
 
-    # Send the frame data
-    client_socket.sendall(frame_bytes)
+    # combine the header and data
+    message = header + frame_bytes
+
+    # send the data over the socket
+    client_socket.sendall(message) 
+    
 
 # Close the sockets and release the capture object
 client_socket.close()
