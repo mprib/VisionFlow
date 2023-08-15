@@ -8,7 +8,7 @@ from pathlib import Path
 
 # Create a client socket
 client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-host = 'localhost'  # Change this to the server's IP address
+host = '192.168.86.42'  # Change this to the server's IP address
 port = 12345
 client_socket.connect((host, port))
 

@@ -21,7 +21,7 @@ if not capture.isOpened():
 
 # Create a server socket
 server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-host = 'localhost'  # Change this to your server's IP address if needed
+host =  socket.gethostbyname(socket.gethostname())
 port = 12345
 server_socket.bind((host, port))
 server_socket.listen(5)
