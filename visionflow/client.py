@@ -6,12 +6,25 @@ import socket
 import numpy as np
 import struct
 from pathlib import Path
+import argparse
 
+# Initialize ArgumentParser object
+parser = argparse.ArgumentParser()
+
+# Add host argument
+parser.add_argument('-H', '--host', type=str, default='localhost',
+                    help='Host IP for the server.')
+
+args = parser.parse_args()
+
+# Use args.host in place of the host IP
+host = args.host
+
+# host = "192.168.86.42"
 # Create a client socket
 client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-host = 'localhost'  # Change this to the server's IP address
-host = '192.168.86.42'  # Change this to the server's IP address
 port = 12345
+logger.info(f"Client connecting on {host}:{port}")
 client_socket.connect((host, port))
 
 def receive_all(sock, count):
