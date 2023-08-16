@@ -8,7 +8,20 @@ import struct
 import numpy as np
 
 from pathlib import Path
+import argparse
 
+# Initialize ArgumentParser object
+parser = argparse.ArgumentParser()
+
+# Add host argument
+parser.add_argument('-H', '--host', type=str, default='localhost',
+                    help='Host IP for the server.')
+
+args = parser.parse_args()
+
+# Use args.host in place of the host IP
+host = args.host
+logger.info(f"Binding host to {host}")
 # Create a capture object for the webcam
 capture = cv2.VideoCapture(0, cv2.CAP_ANY)
 
@@ -23,8 +36,8 @@ if not capture.isOpened():
 # Create a server socket
 server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 # host =  socket.gethostbyname(socket.gethostname())
-host = "localhost"
-host = '0.0.0.0' # bind server to this so it listens on all connections. Not really sure about the details, but it's what ChatGPT told me to do.
+# host = "localhost"
+# host = '0.0.0.0' # bind server to this so it listens on all connections. Not really sure about the details, but it's what ChatGPT told me to do.
 port = 12345
 server_socket.bind((host, port))
 server_socket.listen(5)
