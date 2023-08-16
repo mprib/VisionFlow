@@ -24,6 +24,7 @@ if not capture.isOpened():
 server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 # host =  socket.gethostbyname(socket.gethostname())
 host = '0.0.0.0' # bind server to this so it listens on all connections. Not really sure about the details, but it's what ChatGPT told me to do.
+host = "localhost"
 port = 12345
 server_socket.bind((host, port))
 server_socket.listen(5)
@@ -38,7 +39,7 @@ while True:
     ret, frame = capture.read()
     frame_count +=1
     toc=time.time()
-    fps = frame_count/(toc-tic)
+    fps = round(frame_count/(toc-tic),0)
     # convert frame to bytes
     frame = frame.astype(np.uint8)  # Ensure data is of type uint8
     # Serialize the frame as bytes
