@@ -9,7 +9,7 @@ import numpy as np
 from pathlib import Path
 
 # Create a capture object for the webcam
-capture = cv2.VideoCapture(0, cv2.CAP_DSHOW)
+capture = cv2.VideoCapture(0, cv2.CAP_ANY)
 
 # collect a test frame
 success, frame = capture.read()
@@ -21,7 +21,8 @@ if not capture.isOpened():
 
 # Create a server socket
 server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-host = 'localhost'  # Change this to your server's IP address if needed
+# host =  socket.gethostbyname(socket.gethostname())
+host = '0.0.0.0' # bind server to this so it listens on all connections. Not really sure about the details, but it's what ChatGPT told me to do.
 port = 12345
 server_socket.bind((host, port))
 server_socket.listen(5)
