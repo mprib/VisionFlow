@@ -9,7 +9,7 @@ import numpy as np
 
 from pathlib import Path
 import argparse
-
+import platform
 
 TARGET_HEIGHT = 300  # The target height you want for your image
 COMPRESSION = 90
@@ -26,7 +26,17 @@ args = parser.parse_args()
 host = args.host
 logger.info(f"Binding host to {host}")
 # Create a capture object for the webcam
-capture = cv2.VideoCapture(0, cv2.CAP_ANY)
+if platform.system() == "Windows":
+    connection_method = cv2.CAP_DSHOW
+else:
+    connection_method = cv2.CAP_ANY
+
+# Create a capture object for the webcam
+capture = cv2.VideoCapture(0, connection_method)
+width = 1280
+height = 720
+capture.set(cv2.CAP_PROP_FRAME_WIDTH, width)
+capture.set(cv2.CAP_PROP_FRAME_HEIGHT, height)
 
 # collect a test frame
 success, frame = capture.read()
