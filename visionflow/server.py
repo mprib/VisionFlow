@@ -46,9 +46,13 @@ capture.set(cv2.CAP_PROP_FRAME_HEIGHT, height)
 # collect a test frame
 success, frame = capture.read()
 
+if frame.shape != (height, width,3):
+    logger.info("Capture resolution not successfully changed.")
+    exit()
+    
 # Check if the capture object was successfully opened
 if not capture.isOpened():
-    print("Error: Could not open webcam.")
+    logger.info("Error: Could not open webcam.")
     exit()
 
 # Create a server socket
