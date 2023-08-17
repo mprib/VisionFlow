@@ -60,13 +60,12 @@ frame_count = 0
 tic = time.time()
 while True:
     ret, frame = capture.read()
-
     # resize frame to fit target height
-    frame_height, frame_width = frame.shape[:2]
-    resize_ratio = TARGET_HEIGHT / frame_height
+    original_frame_height, original_frame_width = frame.shape[:2]
+    resize_ratio = TARGET_HEIGHT / original_frame_height
 
-    width = int(frame_width * resize_ratio)
-    height = int(frame_height * resize_ratio)
+    width = int(original_frame_width * resize_ratio)
+    height = int(original_frame_height * resize_ratio)
 
     # resizing the frame
     frame = cv2.resize(frame, (width, height), interpolation = cv2.INTER_LINEAR)
@@ -88,7 +87,7 @@ while True:
     frame_size = len(frame_bytes)
     # Get the frame shape for reconstruction
     frame_shape = frame.shape
-    logger.info(f"Frame shape is {frame_shape}...reading on average at {fps} fps")
+    logger.info(f"Frame shape is ({original_frame_width}, {original_frame_height})...reading on average at {fps} fps")
      
     # package shape too
     header = struct.pack('<L', frame_size)
