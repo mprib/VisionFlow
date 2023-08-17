@@ -27,10 +27,13 @@ host = args.host
 logger.info(f"Binding host to {host}")
 # Create a capture object for the webcam
 if platform.system() == 'Windows':
+    logger.info("Connecting via CAP_DSHOW")
     connection_method = cv2.CAP_DSHOW
 elif platform.system() == 'Darwin':
+    logger.info("Connecting via CAP_AVFOUNDATION")
     connection_method = cv2.CAP_AVFOUNDATION
 else:
+    logger.info("Connecting via CAP_V4L2")
     connection_method = cv2.CAP_V4L2
 
 # Create a capture object for the webcam
