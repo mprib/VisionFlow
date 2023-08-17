@@ -20,7 +20,9 @@ args = parser.parse_args()
 # Use args.host in place of the host IP
 host = args.host
 
-# host = "192.168.86.42"
+if __name__== "__main__":
+    # for current debug and development purposes
+    host = "192.168.86.42"
 # Create a client socket
 client_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 port = 12345
