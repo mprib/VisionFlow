@@ -6,8 +6,8 @@ import time
 import sys
 
 
-DEBUG_TARGET = "client"
 DEBUG_TARGET = "server"
+DEBUG_TARGET = "client"
 
 
 match DEBUG_TARGET:
