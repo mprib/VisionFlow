@@ -7,8 +7,10 @@ from pathlib import Path
 
 if platform.system() == "Windows":
     connection_method = cv2.CAP_DSHOW
-else:
-    connection_method = cv2.CAP_ANY
+elif platform.system() == "Darwin":
+    connection_method = cv2.CAP_AVFOUNDATION
+elif platform.system() == "Linux":
+    connection_method = cv2.CAP_V4L2
 
 # Create a capture object for the webcam
 capture = cv2.VideoCapture(0, connection_method)
