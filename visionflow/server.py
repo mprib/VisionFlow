@@ -10,6 +10,9 @@ import numpy as np
 from pathlib import Path
 import argparse
 
+
+TARGET_HEIGHT = 300  # The target height you want for your image
+COMPRESSION = 90
 # Initialize ArgumentParser object
 parser = argparse.ArgumentParser()
 
@@ -35,9 +38,6 @@ if not capture.isOpened():
 
 # Create a server socket
 server_socket = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-# host =  socket.gethostbyname(socket.gethostname())
-# host = "localhost"
-# host = '0.0.0.0' # bind server to this so it listens on all connections. Not really sure about the details, but it's what ChatGPT told me to do.
 port = 12345
 server_socket.bind((host, port))
 server_socket.listen(5)
@@ -50,27 +50,53 @@ frame_count = 0
 tic = time.time()
 while True:
     ret, frame = capture.read()
+
+    # resize frame to fit target height
+    frame_height, frame_width = frame.shape[:2]
+    resize_ratio = TARGET_HEIGHT / frame_height
+
+    width = int(frame_width * resize_ratio)
+    height = int(frame_height * resize_ratio)
+
+    # resizing the frame
+    frame = cv2.resize(frame, (width, height), interpolation = cv2.INTER_LINEAR)
+   
+    # Compress the frame to JPEG
+    ret, frame = cv2.imencode('.jpg', frame, [int(cv2.IMWRITE_JPEG_QUALITY), COMPRESSION])
+
+    # ensure it's in byte format
+    if not ret:
+        raise Exception("Could not encode image!")
+    frame_bytes = frame.tobytes()  
+    
+
     frame_count +=1
     toc=time.time()
     fps = round(frame_count/(toc-tic),0)
+
     # convert frame to bytes
-    frame = frame.astype(np.uint8)  # Ensure data is of type uint8
+    # frame = frame.astype(np.uint8)  # Ensure data is of type uint8
     # Serialize the frame as bytes
-    frame_bytes = frame.tobytes()
+    # frame_bytes = frame.tobytes()
+
+
     frame_size = len(frame_bytes)
     # Get the frame shape for reconstruction
-    
     frame_shape = frame.shape
     logger.info(f"Frame shape is {frame_shape}...reading on average at {fps} fps")
      
     # package shape too
-    header = struct.pack('<LIII', frame_size, *frame.shape)
+    header = struct.pack('<L', frame_size)
 
     # combine the header and data
     message = header + frame_bytes
 
     # send the data over the socket
-    client_socket.sendall(message) 
+    try:
+        client_socket.sendall(message) 
+    except ConnectionResetError:
+        logger.info(f"Client has disconnected. Shutting server down.")
+        break
     
 
 # Close the sockets and release the capture object
