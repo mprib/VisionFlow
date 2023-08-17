@@ -74,11 +74,6 @@ while True:
     toc=time.time()
     fps = round(frame_count/(toc-tic),0)
 
-    # convert frame to bytes
-    # frame = frame.astype(np.uint8)  # Ensure data is of type uint8
-    # Serialize the frame as bytes
-    # frame_bytes = frame.tobytes()
-
 
     frame_size = len(frame_bytes)
     # Get the frame shape for reconstruction
